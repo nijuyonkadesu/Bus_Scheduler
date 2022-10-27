@@ -9,7 +9,7 @@ class BusScheduleViewModel (private val scheduleDao: ScheduleDao): ViewModel(){
     fun scheduleForStopName(name: String) = scheduleDao.getByStopName(name)
 }
 
-// Instantiating viewModels in fragments directly is complex, fragment alone should take care of
+// Instantiating viewModels in fragments directly is complex, otherwise fragment alone should take care of
 // memory management
 class BusScheduleViewModelFactory(
     private val scheduleDao: ScheduleDao

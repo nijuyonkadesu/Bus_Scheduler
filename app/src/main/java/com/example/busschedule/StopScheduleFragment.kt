@@ -20,9 +20,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.busschedule.databinding.StopScheduleFragmentBinding
+import com.example.busschedule.viewmodels.BusScheduleViewModel
+import com.example.busschedule.viewmodels.BusScheduleViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class StopScheduleFragment: Fragment() {
 
@@ -35,6 +41,13 @@ class StopScheduleFragment: Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var recyclerView: RecyclerView
+
+    // Get reference to view model
+    private val viewModel: BusScheduleViewModel by activityViewModels {
+        BusScheduleViewModelFactory(
+            (activity?.application as BusScheduleApplication).database.scheduleDao()
+        )
+    }
 
     private lateinit var stopName: String
 
@@ -53,6 +66,15 @@ class StopScheduleFragment: Fragment() {
     ): View? {
         _binding = StopScheduleFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // no need to define onClickListener, coz there is no next screen
+        val busStopAdapter = BusStopAdapter {}
+        recyclerView.adapter = busStopAdapter
+        GlobalScope.launch(Dispatchers.IO) {
+            busStopAdapter.submitList(viewModel.scheduleForStopName(stopName))
+        }
         return view
     }
 

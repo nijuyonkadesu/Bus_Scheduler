@@ -21,6 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +29,6 @@ import com.example.busschedule.databinding.FullScheduleFragmentBinding
 import com.example.busschedule.viewmodels.BusScheduleViewModel
 import com.example.busschedule.viewmodels.BusScheduleViewModelFactory
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class FullScheduleFragment: Fragment() {
@@ -50,7 +50,7 @@ class FullScheduleFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FullScheduleFragmentBinding.inflate(inflater, container, false)
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -66,8 +66,10 @@ class FullScheduleFragment: Fragment() {
         recyclerView.adapter = busStopAdapter
 
         // Update the view based on the new list - this is the purpose of submitList
-        GlobalScope.launch(Dispatchers.IO) {
-            busStopAdapter.submitList(viewModel.fullSchedule())
+        lifecycle.coroutineScope.launch(Dispatchers.IO) {
+            viewModel.fullSchedule().collect {
+                busStopAdapter.submitList(it)
+            }
         }
         return binding.root
     }

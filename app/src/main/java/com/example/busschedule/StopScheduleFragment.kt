@@ -21,6 +21,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.busschedule.databinding.StopScheduleFragmentBinding
@@ -63,7 +65,7 @@ class StopScheduleFragment: Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = StopScheduleFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         recyclerView = binding.recyclerView
@@ -72,8 +74,10 @@ class StopScheduleFragment: Fragment() {
         // no need to define onClickListener, coz there is no next screen
         val busStopAdapter = BusStopAdapter {}
         recyclerView.adapter = busStopAdapter
-        GlobalScope.launch(Dispatchers.IO) {
-            busStopAdapter.submitList(viewModel.scheduleForStopName(stopName))
+        lifecycle.coroutineScope.launch(Dispatchers.IO) {
+            viewModel.scheduleForStopName(stopName).collect {
+                busStopAdapter.submitList(it)
+            }
         }
         return view
     }

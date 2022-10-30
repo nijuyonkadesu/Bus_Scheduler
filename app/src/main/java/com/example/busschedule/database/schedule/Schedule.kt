@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Entity
 data class Schedule(
@@ -17,8 +18,8 @@ data class Schedule(
 @Dao
 interface ScheduleDao {
     @Query("select * from schedule order by arrival_time")
-    fun getAll(): List<Schedule> // For screen 1
+    fun getAll(): Flow<List<Schedule>> // For screen 1
 
     @Query("select * from schedule where stop_name = :stopName order by arrival_time")
-    fun getByStopName(stopName: String): List<Schedule>
+    fun getByStopName(stopName: String): Flow<List<Schedule>>
 }

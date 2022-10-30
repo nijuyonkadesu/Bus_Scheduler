@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.busschedule.database.schedule.Schedule
 import com.example.busschedule.databinding.BusStopItemBinding
 import java.util.*
-
+// Calling constructor of ListAdapter of type <Schedule, ..ViewHolder> with the parameter DiffCallback fn
 class BusStopAdapter(private val onClickItem: (Schedule) -> Unit): ListAdapter<Schedule, BusStopAdapter.BusStopViewHolder>(DiffCallback) {
     // 1. Create ViewHolder to access the item got created in rv
     class BusStopViewHolder(private var binding: BusStopItemBinding): RecyclerView.ViewHolder(binding.root) {
@@ -31,6 +31,7 @@ class BusStopAdapter(private val onClickItem: (Schedule) -> Unit): ListAdapter<S
                 false
             )
         )
+        // Attaching on click in CreateView fn instead of BindView fn
         viewHolder.itemView.setOnClickListener {
             val position = viewHolder.adapterPosition
             onClickItem(getItem(position))

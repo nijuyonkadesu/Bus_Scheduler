@@ -7,6 +7,14 @@ The Bus Scheduler app displays a list of bus stops and arrival times. Tapping a 
 
 The bus stops are stored in a Room database. Schedule items are represented by the `Schedule` class and queries on the data table are made by the `ScheduleDao` class. The app includes a view model to access the `ScheduleDao` and format data to be display in a list, using `Flow` to send data to a recycler view adapter.
 
+## Previews
+<p align="center">
+<img src="previews/ss (1).png" alt="drawing" width="270px" />
+</p>
+
+## Download APK
+Go to the [Releases](https://github.com/nijuyonkadesu/Bus_Scheduler/releases) to download the latest APK
+
 # Pre-requisites
 * Experience with Kotlin syntax.
 * Familiarity with activities, fragments, and recycler views.

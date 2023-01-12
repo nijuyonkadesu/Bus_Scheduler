@@ -22,7 +22,7 @@ class BusStopAdapter(private val onClickItem: (Schedule) -> Unit): ListAdapter<S
             )
         }
     }
-    // 2. Inflate view and attack onClickListener
+    // 2. Inflate view and attach onClickListener
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BusStopViewHolder {
         val viewHolder = BusStopViewHolder(
             BusStopItemBinding.inflate(
@@ -35,6 +35,9 @@ class BusStopAdapter(private val onClickItem: (Schedule) -> Unit): ListAdapter<S
         viewHolder.itemView.setOnClickListener {
             val position = viewHolder.adapterPosition
             onClickItem(getItem(position))
+            // without this, cannot access Schedule in FullScheduleFragment
+            // This is more than a function. A custom data type.
+            // Current item is fed into onClickItem: (Schedule) -> Unit
         }
         return viewHolder
     }
